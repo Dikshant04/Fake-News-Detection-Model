@@ -14,18 +14,11 @@ nltk.download('stopwords')
 
 print(stopwords.words('english'))
 
-"""Data Pre-processing"""
-
 news_dataset = pd.read_csv('/content/train.csv')
-
 news_dataset.shape
-
 news_dataset.head()
-
 news_dataset.isnull().sum()
-
 news_dataset = news_dataset.fillna('')
-
 news_dataset['content'] = news_dataset['author']+' '+news_dataset['title']
 
 print(news_dataset['content'])
@@ -35,14 +28,6 @@ Y = news_dataset['label']
 
 print(X)
 print(Y)
-
-"""Stemming:
-
-Stemming is the process of reducing a word to its Root word
-
-example:
-actor, actress, acting --> act
-"""
 
 port_stem = PorterStemmer()
 
@@ -58,17 +43,12 @@ news_dataset['content'] = news_dataset['content'].apply(stemming)
 
 print(news_dataset['content'])
 
-#separating the data and label
 X = news_dataset['content'].values
 Y = news_dataset['label'].values
 
 print(X)
-
 print(Y)
 
-Y.shape
-
-# converting the textual data to numerical data
 vectorizer = TfidfVectorizer()
 vectorizer.fit(X)
 
@@ -76,34 +56,21 @@ X = vectorizer.transform(X)
 
 print(X)
 
-"""Splitting the dataset to training & test data"""
-
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, stratify=Y, random_state=2)
-
-"""Training the Model: Logistic Regression"""
 
 model = LogisticRegression()
 
 model.fit(X_train, Y_train)
 
-"""Evaluation
-
-accuracy score
-"""
-
-# accuracy score on the training data
 X_train_prediction = model.predict(X_train)
 training_data_accuracy = accuracy_score(X_train_prediction, Y_train)
 
 print('Accuracy score of the training data : ', training_data_accuracy)
 
-# accuracy score on the test data
 X_test_prediction = model.predict(X_test)
 test_data_accuracy = accuracy_score(X_test_prediction, Y_test)
 
 print('Accuracy score of the test data : ', test_data_accuracy)
-
-"""Making a Predictive System"""
 
 X_new = X_test[3]
 
